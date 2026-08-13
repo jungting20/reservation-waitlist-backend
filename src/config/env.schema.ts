@@ -1,0 +1,12 @@
+import { z } from 'zod';
+
+export const envSchema = z.object({
+  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  PORT: z.coerce.number().int().min(1).max(65535).default(3000),
+  DATABASE_URL: z.url().refine((value) => value.startsWith('postgresql://'), {
+    message: 'DATABASE_URL must use postgresql://',
+  }),
+});
+
+export type Env = z.infer<typeof envSchema>;
+export const parseEnv = (input: NodeJS.ProcessEnv): Env => envSchema.parse(input);
