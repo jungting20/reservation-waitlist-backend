@@ -7,7 +7,7 @@ import { DRIZZLE_DB, PG_POOL } from './database.constants';
 import { DatabaseModule } from './database.module';
 
 describe('DatabaseModule', () => {
-  it('provides one pool and one Drizzle database and closes the pool', async () => {
+  it('provides a bounded pool and one Drizzle database and closes the pool', async () => {
     const endSpy = jest
       .spyOn(Pool.prototype as { end: () => Promise<void> }, 'end')
       .mockResolvedValue(undefined);
@@ -24,7 +24,10 @@ describe('DatabaseModule', () => {
       .useValue(env)
       .compile();
 
-    expect(moduleRef.get(PG_POOL)).toBeInstanceOf(Pool);
+    const pool = moduleRef.get<Pool>(PG_POOL);
+
+    expect(pool).toBeInstanceOf(Pool);
+    expect(pool.options.connectionTimeoutMillis).toBe(1_000);
     expect(moduleRef.get(DRIZZLE_DB)).toBeDefined();
     await moduleRef.close();
     expect(endSpy).toHaveBeenCalledTimes(1);

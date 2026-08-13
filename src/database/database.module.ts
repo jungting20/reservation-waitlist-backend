@@ -31,7 +31,10 @@ class DatabaseLifecycle implements OnModuleDestroy {
       provide: PG_POOL,
       inject: [ENV],
       useFactory: (env: Env): Pool =>
-        new Pool({ connectionString: env.DATABASE_URL }),
+        new Pool({
+          connectionString: env.DATABASE_URL,
+          connectionTimeoutMillis: 1_000,
+        }),
     },
     {
       provide: DRIZZLE_DB,
