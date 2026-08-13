@@ -17,7 +17,7 @@ export default tseslint.config(
       },
       parserOptions: {
         projectService: {
-          allowDefaultProject: ['scripts/*.ts', 'test/*.ts'],
+          allowDefaultProject: ['drizzle.config.ts', 'scripts/*.ts', 'test/*.ts'],
         },
         tsconfigRootDir: import.meta.dirname,
       },
