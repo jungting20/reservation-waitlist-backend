@@ -2,7 +2,6 @@ import { ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RolesGuard } from './roles.guard';
 
-
 describe('RolesGuard', () => {
   let guard: RolesGuard;
   let reflector: Reflector;
@@ -12,7 +11,9 @@ describe('RolesGuard', () => {
     guard = new RolesGuard(reflector);
   });
 
-  const createMockContext = (user?: { role: 'USER' | 'ADMIN' }): ExecutionContext => {
+  const createMockContext = (user?: {
+    role: 'USER' | 'ADMIN';
+  }): ExecutionContext => {
     const request = { user };
     return {
       getHandler: () => jest.fn(),
@@ -22,7 +23,6 @@ describe('RolesGuard', () => {
       }),
     } as unknown as ExecutionContext;
   };
-
 
   it('allows access when no roles are required', () => {
     jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);

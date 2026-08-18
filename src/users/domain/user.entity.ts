@@ -53,7 +53,12 @@ export class User {
     return this.props.role === 'ADMIN';
   }
 
-  toResponse(): { id: string; email: string; role: UserRole; createdAt: string } {
+  toResponse(): {
+    id: string;
+    email: string;
+    role: UserRole;
+    createdAt: string;
+  } {
     return {
       id: this.props.id,
       email: this.props.email,

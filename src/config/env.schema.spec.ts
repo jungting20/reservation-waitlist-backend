@@ -19,9 +19,7 @@ describe('parseEnv', () => {
   it.each([undefined, '', 'http://localhost/database'])(
     'rejects invalid DATABASE_URL %p',
     (DATABASE_URL) => {
-      expect(() =>
-        parseEnv({ DATABASE_URL, JWT_SECRET: jwtSecret }),
-      ).toThrow();
+      expect(() => parseEnv({ DATABASE_URL, JWT_SECRET: jwtSecret })).toThrow();
     },
   );
 
@@ -41,4 +39,3 @@ describe('parseEnv', () => {
     ).toThrow();
   });
 });
-

@@ -1,4 +1,4 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import {
   USER_REPOSITORY,
   type UserRepository,
@@ -7,10 +7,8 @@ import {
   PASSWORD_HASHER,
   type PasswordHasher,
 } from './ports/password-hasher.port';
-import {
-  TOKEN_SERVICE,
-  type TokenService,
-} from './ports/token-service.port';
+import { TOKEN_SERVICE, type TokenService } from './ports/token-service.port';
+import { InvalidCredentialsError } from './errors/invalid-credentials.error';
 
 export interface LoginCommand {
   email: string;
@@ -37,11 +35,7 @@ export class LoginUseCase {
   async execute(command: LoginCommand): Promise<LoginResult> {
     const user = await this.userRepository.findByEmail(command.email);
     if (!user) {
-      throw new UnauthorizedException({
-        statusCode: 401,
-        code: 'UNAUTHENTICATED',
-        message: 'Invalid email or password',
-      });
+      throw new InvalidCredentialsError();
     }
 
     const isValid = await this.passwordHasher.compare(
@@ -49,11 +43,7 @@ export class LoginUseCase {
       user.passwordHash,
     );
     if (!isValid) {
-      throw new UnauthorizedException({
-        statusCode: 401,
-        code: 'UNAUTHENTICATED',
-        message: 'Invalid email or password',
-      });
+      throw new InvalidCredentialsError();
     }
 
     const accessToken = this.tokenService.generateAccessToken({

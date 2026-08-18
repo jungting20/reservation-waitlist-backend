@@ -14,19 +14,18 @@ export class RolesGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const requiredRoles = this.reflector.getAllAndOverride<UserRole[] | undefined>(
-      ROLES_KEY,
-      [context.getHandler(), context.getClass()],
-    );
+    const requiredRoles = this.reflector.getAllAndOverride<
+      UserRole[] | undefined
+    >(ROLES_KEY, [context.getHandler(), context.getClass()]);
 
     if (requiredRoles === undefined || requiredRoles.length === 0) {
       return true;
     }
 
     const request = context.switchToHttp().getRequest<AuthenticatedRequest>();
-    const role = request.user.role;
+    const role = request.user?.role;
 
-    if (!requiredRoles.includes(role)) {
+    if (!role || !requiredRoles.includes(role)) {
       throw new ForbiddenException({
         statusCode: 403,
         code: 'FORBIDDEN',
@@ -36,5 +35,4 @@ export class RolesGuard implements CanActivate {
 
     return true;
   }
-
 }

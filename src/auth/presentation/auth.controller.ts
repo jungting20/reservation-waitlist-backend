@@ -1,7 +1,15 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UsePipes,
+} from '@nestjs/common';
 import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe';
 import { LoginUseCase } from '../application/login.usecase';
 import { SignUpUseCase } from '../application/signup.usecase';
+import { Public } from './decorators/public.decorator';
 import {
   loginDtoSchema,
   signUpDtoSchema,
@@ -10,6 +18,7 @@ import {
 } from './dto/auth.dto';
 
 @Controller('auth')
+@Public()
 export class AuthController {
   constructor(
     private readonly signUpUseCase: SignUpUseCase,

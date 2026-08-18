@@ -1,4 +1,4 @@
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import {
   USER_REPOSITORY,
   type UserRepository,
@@ -8,6 +8,7 @@ import {
   PASSWORD_HASHER,
   type PasswordHasher,
 } from './ports/password-hasher.port';
+import { EmailAlreadyExistsError } from './errors/email-already-exists.error';
 
 export interface SignUpCommand {
   email: string;
@@ -32,11 +33,7 @@ export class SignUpUseCase {
   async execute(command: SignUpCommand): Promise<SignUpResult> {
     const existing = await this.userRepository.findByEmail(command.email);
     if (existing) {
-      throw new ConflictException({
-        statusCode: 409,
-        code: 'EMAIL_ALREADY_EXISTS',
-        message: 'Email is already registered',
-      });
+      throw new EmailAlreadyExistsError(command.email);
     }
 
     const passwordHash = await this.passwordHasher.hash(command.password);

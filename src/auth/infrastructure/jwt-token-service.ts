@@ -1,8 +1,12 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { ENV } from '../../config/config.constants';
 import type { Env } from '../../config/env.schema';
-import type { TokenPayload, TokenService } from '../application/ports/token-service.port';
+import { InvalidTokenError, TokenExpiredError } from '../application/errors';
+import type {
+  TokenPayload,
+  TokenService,
+} from '../application/ports/token-service.port';
 
 @Injectable()
 export class JwtTokenService implements TokenService {
@@ -17,21 +21,18 @@ export class JwtTokenService implements TokenService {
   verifyAccessToken(token: string): TokenPayload {
     try {
       const decoded = jwt.verify(token, this.env.JWT_SECRET);
-      if (typeof decoded === 'string') {
-        throw new UnauthorizedException({
-          statusCode: 401,
-          code: 'UNAUTHENTICATED',
-          message: 'Invalid token structure',
-        });
+      if (typeof decoded === 'string' || !decoded) {
+        throw new InvalidTokenError('Invalid token structure');
       }
       return decoded as unknown as TokenPayload;
-    } catch {
-
-      throw new UnauthorizedException({
-        statusCode: 401,
-        code: 'UNAUTHENTICATED',
-        message: 'Invalid or expired token',
-      });
+    } catch (error) {
+      if (error instanceof jwt.TokenExpiredError) {
+        throw new TokenExpiredError();
+      }
+      if (error instanceof InvalidTokenError) {
+        throw error;
+      }
+      throw new InvalidTokenError();
     }
   }
 }

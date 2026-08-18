@@ -48,33 +48,33 @@
 
 ## 2. Reservation 상태 전이
 
-| 현재 상태 | 사건 | 다음 상태 | 허용 여부 |
-|---|---|---|---|
-| 없음 | 빈 시간대 예약 생성 | CONFIRMED | 허용 |
-| PENDING | 승인 | CONFIRMED | MVP 미사용 |
-| PENDING | 취소 | CANCELLED | MVP 미사용 |
-| PENDING | 유효시간 만료 | EXPIRED | MVP 미사용 |
-| CONFIRMED | 사용자가 시작 10분 전까지 취소 | CANCELLED | 허용 |
-| CONFIRMED | 관리자가 강제 취소 | CANCELLED | 허용 |
-| CONFIRMED | 시작 10분 이내 사용자 취소 | - | 금지 |
-| CANCELLED | 재확정 | - | 금지 |
-| EXPIRED | 재확정 | - | 금지 |
+| 현재 상태 | 사건                           | 다음 상태 | 허용 여부  |
+| --------- | ------------------------------ | --------- | ---------- |
+| 없음      | 빈 시간대 예약 생성            | CONFIRMED | 허용       |
+| PENDING   | 승인                           | CONFIRMED | MVP 미사용 |
+| PENDING   | 취소                           | CANCELLED | MVP 미사용 |
+| PENDING   | 유효시간 만료                  | EXPIRED   | MVP 미사용 |
+| CONFIRMED | 사용자가 시작 10분 전까지 취소 | CANCELLED | 허용       |
+| CONFIRMED | 관리자가 강제 취소             | CANCELLED | 허용       |
+| CONFIRMED | 시작 10분 이내 사용자 취소     | -         | 금지       |
+| CANCELLED | 재확정                         | -         | 금지       |
+| EXPIRED   | 재확정                         | -         | 금지       |
 
 `CANCELLED`와 `EXPIRED`는 최종 상태다. 변경이 필요하면 기존 기록을 되살리지 않고 새 예약을 생성한다.
 
 ## 3. WaitlistEntry 상태 전이
 
-| 현재 상태 | 사건 | 다음 상태 | 허용 여부 |
-|---|---|---|---|
-| 없음 | 예약된 시간대에 대기 등록 | WAITING | 허용 |
-| WAITING | 사용자 또는 관리자 취소 | CANCELLED | 허용 |
-| WAITING | 앞선 예약 취소로 자동 승급 | ACCEPTED | 허용 |
-| WAITING | OFFERED로 전환 | OFFERED | MVP 미사용 |
-| OFFERED | 사용자 수락 | ACCEPTED | MVP 미사용 |
-| OFFERED | 제한시간 만료 | EXPIRED | MVP 미사용 |
-| ACCEPTED | 다시 대기 상태로 복귀 | - | 금지 |
-| CANCELLED | 재등록 처리 | - | 금지; 새 항목 생성 |
-| EXPIRED | 수락 | - | 금지 |
+| 현재 상태 | 사건                       | 다음 상태 | 허용 여부          |
+| --------- | -------------------------- | --------- | ------------------ |
+| 없음      | 예약된 시간대에 대기 등록  | WAITING   | 허용               |
+| WAITING   | 사용자 또는 관리자 취소    | CANCELLED | 허용               |
+| WAITING   | 앞선 예약 취소로 자동 승급 | ACCEPTED  | 허용               |
+| WAITING   | OFFERED로 전환             | OFFERED   | MVP 미사용         |
+| OFFERED   | 사용자 수락                | ACCEPTED  | MVP 미사용         |
+| OFFERED   | 제한시간 만료              | EXPIRED   | MVP 미사용         |
+| ACCEPTED  | 다시 대기 상태로 복귀      | -         | 금지               |
+| CANCELLED | 재등록 처리                | -         | 금지; 새 항목 생성 |
+| EXPIRED   | 수락                       | -         | 금지               |
 
 ## 4. 핵심 불변식
 

@@ -48,6 +48,7 @@
 ### Task 1: mise·pnpm·NestJS 골격
 
 **Files:**
+
 - Create: `mise.toml`
 - Create: `package.json`
 - Create: `pnpm-lock.yaml`
@@ -62,6 +63,7 @@
 - Modify: `.gitignore`
 
 **Interfaces:**
+
 - Produces: NestJS `AppModule`, scripts `build`, `start`, `start:dev`, `lint`, `typecheck`, `test`, `test:e2e`
 - Consumes: 없음
 
@@ -123,7 +125,9 @@ import { AppModule } from './app.module';
 
 describe('AppModule', () => {
   it('compiles', async () => {
-    const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
+    const moduleRef = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
     expect(moduleRef).toBeDefined();
     await moduleRef.close();
   });
@@ -173,6 +177,7 @@ git commit -m "NestJS 프로젝트 기반 구성"
 ### Task 2: Zod 환경설정 모듈
 
 **Files:**
+
 - Create: `.env.example`
 - Create: `src/config/env.schema.ts`
 - Create: `src/config/env.schema.spec.ts`
@@ -182,6 +187,7 @@ git commit -m "NestJS 프로젝트 기반 구성"
 - Modify: `src/main.ts`
 
 **Interfaces:**
+
 - Produces: `parseEnv(input: NodeJS.ProcessEnv): Env`, `ENV` token, `Env` with `NODE_ENV`, `PORT`, `DATABASE_URL`
 - Consumes: `AppModule` from Task 1
 
@@ -193,7 +199,8 @@ Run: `mise exec -- pnpm add dotenv@^17 zod@^4`
 import { parseEnv } from './env.schema';
 
 describe('parseEnv', () => {
-  const databaseUrl = 'postgresql://reservation:reservation@localhost:5432/reservation';
+  const databaseUrl =
+    'postgresql://reservation:reservation@localhost:5432/reservation';
 
   it('applies defaults and parses a valid database URL', () => {
     expect(parseEnv({ DATABASE_URL: databaseUrl })).toEqual({
@@ -209,7 +216,9 @@ describe('parseEnv', () => {
   );
 
   it('rejects an invalid port', () => {
-    expect(() => parseEnv({ DATABASE_URL: databaseUrl, PORT: '70000' })).toThrow();
+    expect(() =>
+      parseEnv({ DATABASE_URL: databaseUrl, PORT: '70000' }),
+    ).toThrow();
   });
 });
 ```
@@ -223,7 +232,9 @@ Expected: FAIL because `parseEnv` does not exist
 import { z } from 'zod';
 
 export const envSchema = z.object({
-  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  NODE_ENV: z
+    .enum(['development', 'test', 'production'])
+    .default('development'),
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
   DATABASE_URL: z.url().refine((value) => value.startsWith('postgresql://'), {
     message: 'DATABASE_URL must use postgresql://',
@@ -231,7 +242,8 @@ export const envSchema = z.object({
 });
 
 export type Env = z.infer<typeof envSchema>;
-export const parseEnv = (input: NodeJS.ProcessEnv): Env => envSchema.parse(input);
+export const parseEnv = (input: NodeJS.ProcessEnv): Env =>
+  envSchema.parse(input);
 ```
 
 Run: `mise exec -- pnpm test -- src/config/env.schema.spec.ts`
@@ -278,6 +290,7 @@ git commit -m "Zod 환경변수 검증 추가"
 ### Task 3: Drizzle 데이터베이스 모듈과 migration 기반
 
 **Files:**
+
 - Create: `src/database/database.constants.ts`
 - Create: `src/database/database.types.ts`
 - Create: `src/database/database.module.ts`
@@ -290,6 +303,7 @@ git commit -m "Zod 환경변수 검증 추가"
 - Modify: `pnpm-lock.yaml`
 
 **Interfaces:**
+
 - Produces: `PG_POOL`, `DRIZZLE_DB`, `AppDatabase`, global `DatabaseModule`
 - Consumes: `ENV: Env` from Task 2
 
@@ -308,13 +322,18 @@ import { DatabaseModule } from './database.module';
 
 describe('DatabaseModule', () => {
   it('provides one pool and one Drizzle database and closes the pool', async () => {
-    const endSpy = jest.spyOn(Pool.prototype, 'end').mockResolvedValue(undefined);
+    const endSpy = jest
+      .spyOn(Pool.prototype, 'end')
+      .mockResolvedValue(undefined);
     const env: Env = {
       NODE_ENV: 'test',
       PORT: 3000,
-      DATABASE_URL: 'postgresql://reservation:reservation@localhost:5432/reservation_test',
+      DATABASE_URL:
+        'postgresql://reservation:reservation@localhost:5432/reservation_test',
     };
-    const moduleRef = await Test.createTestingModule({ imports: [ConfigModule, DatabaseModule] })
+    const moduleRef = await Test.createTestingModule({
+      imports: [ConfigModule, DatabaseModule],
+    })
       .overrideProvider(ENV)
       .useValue(env)
       .compile();
@@ -398,6 +417,7 @@ git commit -m "Drizzle 데이터베이스 모듈 구성"
 ### Task 4: Health API
 
 **Files:**
+
 - Create: `src/health/health.types.ts`
 - Create: `src/health/health.service.ts`
 - Create: `src/health/health.service.spec.ts`
@@ -406,6 +426,7 @@ git commit -m "Drizzle 데이터베이스 모듈 구성"
 - Modify: `src/app.module.ts`
 
 **Interfaces:**
+
 - Produces: `GET /health`, `HealthResponse = { status: 'ok' | 'error'; database: 'up' | 'down' }`
 - Consumes: `PG_POOL: Pool` from Task 3
 
@@ -414,8 +435,13 @@ git commit -m "Drizzle 데이터베이스 모듈 구성"
 ```ts
 it('returns up when SELECT 1 succeeds', async () => {
   pool.query.mockResolvedValue({ rows: [{ '?column?': 1 }] });
-  await expect(service.check()).resolves.toEqual({ status: 'ok', database: 'up' });
-  expect(pool.query).toHaveBeenCalledWith(expect.objectContaining({ text: 'SELECT 1' }));
+  await expect(service.check()).resolves.toEqual({
+    status: 'ok',
+    database: 'up',
+  });
+  expect(pool.query).toHaveBeenCalledWith(
+    expect.objectContaining({ text: 'SELECT 1' }),
+  );
 });
 
 it('throws 503 without leaking the connection error', async () => {
@@ -467,6 +493,7 @@ git commit -m "데이터베이스 상태 확인 API 추가"
 ### Task 5: PostgreSQL Compose, 안전한 DB 재생성, E2E
 
 **Files:**
+
 - Create: `compose.yaml`
 - Create: `docker/postgres/init/01-create-test-database.sql`
 - Create: `scripts/reset-local-databases.ts`
@@ -477,6 +504,7 @@ git commit -m "데이터베이스 상태 확인 API 추가"
 - Modify: `pnpm-lock.yaml`
 
 **Interfaces:**
+
 - Produces: PostgreSQL dev DB `reservation`, test DB `reservation_test`, `pnpm db:reset`, real `/health` E2E
 - Consumes: `GET /health`, `PG_POOL`, `AppModule`
 
@@ -492,9 +520,21 @@ Expected: exit code 0이며 `postgres` service와 named volume 표시
 `assertLocalResetAllowed(env: Env): void`가 다음을 거부하도록 테스트한다.
 
 ```ts
-expect(() => assertLocalResetAllowed({ ...validEnv, NODE_ENV: 'production' })).toThrow();
-expect(() => assertLocalResetAllowed({ ...validEnv, DATABASE_URL: 'postgresql://u:p@db.example.com:5432/reservation' })).toThrow();
-expect(() => assertLocalResetAllowed({ ...validEnv, DATABASE_URL: 'postgresql://u:p@localhost:5432/production' })).toThrow();
+expect(() =>
+  assertLocalResetAllowed({ ...validEnv, NODE_ENV: 'production' }),
+).toThrow();
+expect(() =>
+  assertLocalResetAllowed({
+    ...validEnv,
+    DATABASE_URL: 'postgresql://u:p@db.example.com:5432/reservation',
+  }),
+).toThrow();
+expect(() =>
+  assertLocalResetAllowed({
+    ...validEnv,
+    DATABASE_URL: 'postgresql://u:p@localhost:5432/production',
+  }),
+).toThrow();
 expect(() => assertLocalResetAllowed(validEnv)).not.toThrow();
 ```
 
@@ -557,10 +597,12 @@ git commit -m "PostgreSQL 개발 및 E2E 환경 구성"
 ### Task 6: CI와 README, Phase 1 완료 검증
 
 **Files:**
+
 - Create: `.github/workflows/ci.yml`
 - Modify: `README.md`
 
 **Interfaces:**
+
 - Produces: pull request CI와 신규 개발자 실행 안내
 - Consumes: Tasks 1~5의 모든 pnpm script와 PostgreSQL 연결 규칙
 

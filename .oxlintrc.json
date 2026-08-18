@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "jest", "unicorn"],
+  "ignorePatterns": ["dist/**", "coverage/**"],
+  "rules": {
+    "jest/require-to-throw-message": "off",
+    "unicorn/prefer-node-protocol": "off"
+  }
+}

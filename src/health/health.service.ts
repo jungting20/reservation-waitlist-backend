@@ -1,4 +1,8 @@
-import { Inject, Injectable, ServiceUnavailableException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import type { Pool } from 'pg';
 import { PG_POOL } from '../database/database.constants';
 import type { HealthResponse } from './health.types';
@@ -13,7 +17,10 @@ export class HealthService {
       await this.pool.query(query);
       return { status: 'ok', database: 'up' };
     } catch {
-      throw new ServiceUnavailableException({ status: 'error', database: 'down' });
+      throw new ServiceUnavailableException({
+        status: 'error',
+        database: 'down',
+      });
     }
   }
 }

@@ -3,7 +3,10 @@ import { Test } from '@nestjs/testing';
 import type { Server } from 'node:http';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { USER_REPOSITORY, type UserRepository } from '../src/users/domain/user.repository.port';
+import {
+  USER_REPOSITORY,
+  type UserRepository,
+} from '../src/users/domain/user.repository.port';
 import { User } from '../src/users/domain/user.entity';
 
 describe('Auth & Users (e2e)', () => {
@@ -69,7 +72,9 @@ describe('Auth & Users (e2e)', () => {
       email: 'test@example.com',
       role: 'USER',
     });
-    expect((response.body as Record<string, unknown>).passwordHash).toBeUndefined();
+    expect(
+      (response.body as Record<string, unknown>).passwordHash,
+    ).toBeUndefined();
   });
 
   it('POST /auth/signup - returns 409 when email is duplicate', async () => {
@@ -95,7 +100,10 @@ describe('Auth & Users (e2e)', () => {
       });
 
     expect(response.status).toBe(200);
-    const body = response.body as { accessToken: string; user: { email: string } };
+    const body = response.body as {
+      accessToken: string;
+      user: { email: string };
+    };
     expect(body.accessToken).toBeDefined();
     expect(body.user.email).toBe('test@example.com');
   });
@@ -135,7 +143,6 @@ describe('Auth & Users (e2e)', () => {
       role: 'USER',
     });
   });
-
 
   it('GET /users/me - returns 401 without Authorization header', async () => {
     const meRes = await request(app.getHttpServer()).get('/users/me');

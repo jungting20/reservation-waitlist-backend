@@ -14,11 +14,13 @@
     "db:migrate": "drizzle-kit migrate",
     "db:reset": "tsx scripts/reset-local-databases.ts",
     "db:studio": "drizzle-kit studio",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"scripts/**/*.ts\"",
+    "format": "oxfmt --write",
+    "format:check": "oxfmt --check",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main.js",
-    "lint": "eslint \"{src,test,scripts}/**/*.ts\" drizzle.config.ts",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
     "typecheck": "tsc --noEmit",
     "test": "jest --runInBand",
     "test:e2e": "jest --config test/jest-e2e.json --runInBand"
@@ -54,7 +56,6 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.5",
     "@nestjs/cli": "^11.0.24",
     "@nestjs/testing": "^11.1.29",
     "@types/bcrypt": "^6.0.0",
@@ -65,18 +66,15 @@
     "@types/pg": "^8.21.0",
     "@types/supertest": "^7.2.1",
     "drizzle-kit": "^0.31.10",
-    "eslint": "^9.39.5",
-    "eslint-config-prettier": "^10.1.8",
-    "globals": "^16.5.0",
     "jest": "^30.4.2",
-    "prettier": "^3.9.6",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.78.0",
     "source-map-support": "^0.5.21",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.12",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.23.12",
-    "typescript": "6.0.3",
-    "typescript-eslint": "^8.67.0"
+    "typescript": "6.0.3"
   }
 }

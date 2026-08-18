@@ -13,7 +13,6 @@ describe('AppModule', () => {
       JWT_SECRET: 'super_secret_jwt_key_at_least_32_characters_long',
     };
 
-
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     })

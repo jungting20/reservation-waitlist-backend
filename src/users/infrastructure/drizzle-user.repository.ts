@@ -4,7 +4,10 @@ import { DRIZZLE_DB } from '../../database/database.constants';
 import type { AppDatabase } from '../../database/database.types';
 import { users, type UserSelect } from '../../database/schema/users';
 import { User } from '../domain/user.entity';
-import type { CreateUserData, UserRepository } from '../domain/user.repository.port';
+import type {
+  CreateUserData,
+  UserRepository,
+} from '../domain/user.repository.port';
 
 @Injectable()
 export class DrizzleUserRepository implements UserRepository {
@@ -60,7 +63,10 @@ export class DrizzleUserRepository implements UserRepository {
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const rows = await this.db.select().from(users).where(eq(users.email, email));
+    const rows = await this.db
+      .select()
+      .from(users)
+      .where(eq(users.email, email));
     const row = rows[0];
     if (!row) {
       return null;
@@ -75,5 +81,4 @@ export class DrizzleUserRepository implements UserRepository {
       .where(eq(users.email, email));
     return Boolean(rows[0]);
   }
-
 }

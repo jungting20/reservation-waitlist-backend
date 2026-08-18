@@ -4,6 +4,8 @@ import { SignUpUseCase } from './signup.usecase';
 import { LoginUseCase } from './login.usecase';
 import type { PasswordHasher } from './ports/password-hasher.port';
 import type { TokenService } from './ports/token-service.port';
+import { EmailAlreadyExistsError } from './errors/email-already-exists.error';
+import { InvalidCredentialsError } from './errors/invalid-credentials.error';
 
 describe('Auth UseCases', () => {
   let mockUserRepo: jest.Mocked<UserRepository>;
@@ -51,10 +53,9 @@ describe('Auth UseCases', () => {
       expect(result.email).toBe('test@example.com');
       expect(result.role).toBe('USER');
       expect(mockPasswordHasher.hash.mock.calls).toEqual([['password123']]);
-
     });
 
-    it('throws 409 Conflict when email already exists', async () => {
+    it('throws EmailAlreadyExistsError when email already exists', async () => {
       mockUserRepo.findByEmail.mockResolvedValue(
         User.create({
           id: 'user-uuid',
@@ -72,9 +73,7 @@ describe('Auth UseCases', () => {
           email: 'existing@example.com',
           password: 'password123',
         }),
-      ).rejects.toMatchObject({
-        status: 409,
-      });
+      ).rejects.toThrow(EmailAlreadyExistsError);
     });
   });
 
@@ -107,7 +106,23 @@ describe('Auth UseCases', () => {
       expect(result.user.email).toBe('test@example.com');
     });
 
-    it('throws 401 Unauthorized when password does not match', async () => {
+    it('throws InvalidCredentialsError when user does not exist', async () => {
+      mockUserRepo.findByEmail.mockResolvedValue(null);
+
+      const useCase = new LoginUseCase(
+        mockUserRepo,
+        mockPasswordHasher,
+        mockTokenService,
+      );
+      await expect(
+        useCase.execute({
+          email: 'nonexistent@example.com',
+          password: 'password123',
+        }),
+      ).rejects.toThrow(InvalidCredentialsError);
+    });
+
+    it('throws InvalidCredentialsError when password does not match', async () => {
       mockUserRepo.findByEmail.mockResolvedValue(
         User.create({
           id: 'user-uuid',
@@ -130,9 +145,7 @@ describe('Auth UseCases', () => {
           email: 'test@example.com',
           password: 'wrong_password',
         }),
-      ).rejects.toMatchObject({
-        status: 401,
-      });
+      ).rejects.toThrow(InvalidCredentialsError);
     });
   });
 });

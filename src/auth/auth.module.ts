@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '../config/config.module';
 import { UsersModule } from '../users/users.module';
 import { LoginUseCase } from './application/login.usecase';
@@ -19,6 +20,14 @@ import { RolesGuard } from './presentation/guards/roles.guard';
     LoginUseCase,
     AuthGuard,
     RolesGuard,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
     {
       provide: PASSWORD_HASHER,
       useClass: BcryptPasswordHasher,
