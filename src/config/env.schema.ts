@@ -6,7 +6,9 @@ export const envSchema = z.object({
   DATABASE_URL: z.url().refine((value) => value.startsWith('postgresql://'), {
     message: 'DATABASE_URL must use postgresql://',
   }),
+  JWT_SECRET: z.string().min(32, { message: 'JWT_SECRET must be at least 32 characters' }),
 });
+
 
 export type Env = z.infer<typeof envSchema>;
 export const parseEnv = (input: NodeJS.ProcessEnv): Env => envSchema.parse(input);

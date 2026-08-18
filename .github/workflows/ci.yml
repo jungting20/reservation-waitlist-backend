@@ -10,6 +10,7 @@ jobs:
     env:
       NODE_ENV: test
       DATABASE_URL: postgresql://reservation:reservation@localhost:5432/reservation_test
+      JWT_SECRET: super_secret_jwt_key_at_least_32_characters_long_for_ci
     services:
       postgres:
         image: postgres:17-alpine
