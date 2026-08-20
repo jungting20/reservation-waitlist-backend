@@ -1,4 +1,4 @@
-import { ApplicationError } from '../../../common/errors/application.error';
+import { ApplicationError } from '../../../../common/errors/application.error';
 
 export class TokenExpiredError extends ApplicationError {
   readonly code = 'TOKEN_EXPIRED';

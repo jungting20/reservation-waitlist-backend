@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken';
-import type { Env } from '../../config/env.schema';
+import type { Env } from '../../../config/env.schema';
 import { InvalidTokenError, TokenExpiredError } from '../application/errors';
 import { JwtTokenService } from './jwt-token-service';
 

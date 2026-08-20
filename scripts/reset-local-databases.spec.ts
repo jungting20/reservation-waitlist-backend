@@ -160,6 +160,7 @@ describe('assertLocalResetAllowed', () => {
     NODE_ENV: 'development',
     PORT: 3000,
     DATABASE_URL: localDatabaseUrl,
+    JWT_SECRET: 'test_jwt_secret_min_32_characters_long',
   };
 
   it('rejects production environments', () => {

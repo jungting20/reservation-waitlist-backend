@@ -1,4 +1,4 @@
-import { ApplicationError } from '../../../common/errors/application.error';
+import { ApplicationError } from '../../../../common/errors/application.error';
 
 export class MissingAuthHeaderError extends ApplicationError {
   readonly code = 'UNAUTHENTICATED';

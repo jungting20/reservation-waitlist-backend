@@ -6,7 +6,7 @@ import {
   Post,
   UsePipes,
 } from '@nestjs/common';
-import { ZodValidationPipe } from '../../common/pipes/zod-validation.pipe';
+import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
 import { LoginUseCase } from '../application/login.usecase';
 import { SignUpUseCase } from '../application/signup.usecase';
 import { Public } from './decorators/public.decorator';

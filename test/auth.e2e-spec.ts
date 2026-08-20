@@ -6,8 +6,8 @@ import { AppModule } from '../src/app.module';
 import {
   USER_REPOSITORY,
   type UserRepository,
-} from '../src/users/domain/user.repository.port';
-import { User } from '../src/users/domain/user.entity';
+} from '../src/domains/users/domain/user.repository.port';
+import { User } from '../src/domains/users/domain/user.entity';
 
 describe('Auth & Users (e2e)', () => {
   let app: INestApplication<Server>;

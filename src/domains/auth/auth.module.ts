@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { ConfigModule } from '../config/config.module';
+import { ConfigModule } from '../../config/config.module';
 import { UsersModule } from '../users/users.module';
 import { LoginUseCase } from './application/login.usecase';
 import { PASSWORD_HASHER } from './application/ports/password-hasher.port';

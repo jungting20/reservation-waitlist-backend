@@ -1,4 +1,4 @@
-import { ApplicationError } from '../../../common/errors/application.error';
+import { ApplicationError } from '../../../../common/errors/application.error';
 
 export class EmailAlreadyExistsError extends ApplicationError {
   readonly code = 'EMAIL_ALREADY_EXISTS';

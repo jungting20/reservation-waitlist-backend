@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from '../database/database.module';
+import { DatabaseModule } from '../../database/database.module';
 import { USER_REPOSITORY } from './domain/user.repository.port';
 import { DrizzleUserRepository } from './infrastructure/drizzle-user.repository';
 import { UsersController } from './presentation/users.controller';

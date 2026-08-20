@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
-import { ENV } from '../../config/config.constants';
-import type { Env } from '../../config/env.schema';
+import { ENV } from '../../../config/config.constants';
+import type { Env } from '../../../config/env.schema';
 import { InvalidTokenError, TokenExpiredError } from '../application/errors';
 import type {
   TokenPayload,

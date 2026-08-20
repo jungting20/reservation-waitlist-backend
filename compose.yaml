@@ -1,8 +1,25 @@
 name: reservation-waitlist-local
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: reservation-api
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://reservation:reservation@postgres:5432/reservation
+      JWT_SECRET: dev-jwt-secret-key-at-least-32-characters-long
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   postgres:
     image: postgres:17-alpine
+    container_name: reservation-postgres
     environment:
       POSTGRES_DB: reservation
       POSTGRES_PASSWORD: reservation
