@@ -10,7 +10,7 @@ describe('parseEnv', () => {
       parseEnv({ DATABASE_URL: databaseUrl, JWT_SECRET: jwtSecret }),
     ).toEqual({
       NODE_ENV: 'development',
-      PORT: 3000,
+      PORT: 18080,
       DATABASE_URL: databaseUrl,
       JWT_SECRET: jwtSecret,
     });

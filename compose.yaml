@@ -7,10 +7,10 @@ services:
       dockerfile: Dockerfile
     container_name: reservation-api
     ports:
-      - '3000:3000'
+      - '18080:18080'
     environment:
       NODE_ENV: development
-      PORT: 3000
+      PORT: 18080
       DATABASE_URL: postgresql://reservation:reservation@postgres:5432/reservation
       JWT_SECRET: dev-jwt-secret-key-at-least-32-characters-long
     depends_on:

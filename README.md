@@ -15,7 +15,7 @@ cp .env.example .env
 docker compose up --detach --wait
 mise exec -- pnpm db:migrate
 mise exec -- pnpm start:dev
-curl http://localhost:3000/health
+curl http://localhost:18080/health
 ```
 
 정상 상태에서 상태 확인 API는 `{"status":"ok","database":"up"}`을 반환합니다.

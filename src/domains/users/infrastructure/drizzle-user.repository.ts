@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
+import { Repository } from '../../../common/infrastructure/repository';
 import { DRIZZLE_DB } from '../../../database/database.constants';
 import type { AppDatabase } from '../../../database/database.types';
 import { users, type UserSelect } from '../../../database/schema/users';
@@ -10,10 +11,15 @@ import type {
 } from '../domain/user.repository.port';
 
 @Injectable()
-export class DrizzleUserRepository implements UserRepository {
-  constructor(@Inject(DRIZZLE_DB) private readonly db: AppDatabase) {}
+export class DrizzleUserRepository
+  extends Repository<UserSelect, User>
+  implements UserRepository
+{
+  constructor(@Inject(DRIZZLE_DB) private readonly db: AppDatabase) {
+    super();
+  }
 
-  private mapToDomain(row: UserSelect): User {
+  protected mapToDomain(row: UserSelect): User {
     return User.create({
       id: row.id,
       email: row.email,

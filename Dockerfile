@@ -22,7 +22,7 @@ FROM node:24-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PORT=3000
+ENV PORT=18080
 
 # Security: run as non-root user
 USER node
@@ -33,6 +33,6 @@ COPY --chown=node:node --from=builder /app/node_modules ./node_modules
 COPY --chown=node:node --from=builder /app/dist ./dist
 COPY --chown=node:node --from=builder /app/drizzle ./drizzle
 
-EXPOSE 3000
+EXPOSE 18080
 
 CMD ["node", "dist/main.js"]

@@ -1,3 +1,5 @@
+import type { Entity } from '../../../common/domain/entity.interface';
+
 export type UserRole = 'USER' | 'ADMIN';
 
 export interface UserProps {
@@ -9,7 +11,14 @@ export interface UserProps {
   updatedAt: Date;
 }
 
-export class User {
+export interface UserResponse {
+  id: string;
+  email: string;
+  role: UserRole;
+  createdAt: string;
+}
+
+export class User implements Entity<UserResponse> {
   private constructor(private readonly props: UserProps) {}
 
   static create(props: UserProps): User {
@@ -53,12 +62,7 @@ export class User {
     return this.props.role === 'ADMIN';
   }
 
-  toResponse(): {
-    id: string;
-    email: string;
-    role: UserRole;
-    createdAt: string;
-  } {
+  toResponse(): UserResponse {
     return {
       id: this.props.id,
       email: this.props.email,
