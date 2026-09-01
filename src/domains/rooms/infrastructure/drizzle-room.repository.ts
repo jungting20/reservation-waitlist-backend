@@ -18,7 +18,11 @@ export class DrizzleRoomRepository
 
   protected mapToDomain(row: RoomSelect): Room {
     return Room.create({
-      roomId: row.id,
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      capacity: row.capacity,
+      isActive: row.isActive,
       createdBy: row.createdBy,
       createdAt: row.createdAt,
     });

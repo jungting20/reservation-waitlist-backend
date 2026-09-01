@@ -1,18 +1,14 @@
-import type { Entity } from '../../../common/domain/entity.interface';
-
 export interface RoomProps {
-  roomId: string;
+  id: string;
+  name: string;
+  description: string;
+  capacity: number;
+  isActive: boolean;
   createdBy: string;
   createdAt: Date;
 }
 
-export interface RoomResponse {
-  roomId: string;
-  createdBy: string;
-  createdAt: string;
-}
-
-export class Room implements Entity<RoomResponse> {
+export class Room {
   private constructor(private readonly props: RoomProps) {}
 
   static create(props: RoomProps): Room {
@@ -20,7 +16,23 @@ export class Room implements Entity<RoomResponse> {
   }
 
   get roomId(): string {
-    return this.props.roomId;
+    return this.props.id;
+  }
+
+  get name(): string {
+    return this.props.name;
+  }
+
+  get description(): string {
+    return this.props.description;
+  }
+
+  get capacity(): number {
+    return this.props.capacity;
+  }
+
+  get isActive(): boolean {
+    return this.props.isActive;
   }
 
   get createdBy(): string {
@@ -29,13 +41,5 @@ export class Room implements Entity<RoomResponse> {
 
   get createdAt(): Date {
     return this.props.createdAt;
-  }
-
-  toResponse(): RoomResponse {
-    return {
-      roomId: this.props.roomId,
-      createdBy: this.props.createdBy,
-      createdAt: this.props.createdAt.toISOString(),
-    };
   }
 }

@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { GetRoomsUseCase } from '../application/get-rooms-usecase';
-import type { RoomResponse } from '../domain/room.entity';
+import { toRoomResponse, type RoomResponse } from './room.response';
 
 @Controller('rooms')
 export class RoomsController {
@@ -9,12 +9,12 @@ export class RoomsController {
   @Get()
   async getRooms(): Promise<RoomResponse[]> {
     const rooms = await this.getRoomsUseCase.getRooms();
-    return rooms.map((room) => room.toResponse());
+    return rooms.map(toRoomResponse);
   }
 
   @Get(':roomId')
   async getRoom(@Param('roomId') roomId: string): Promise<RoomResponse | null> {
     const room = await this.getRoomsUseCase.getRoom(roomId);
-    return room?.toResponse() ?? null;
+    return room ? toRoomResponse(room) : null;
   }
 }
