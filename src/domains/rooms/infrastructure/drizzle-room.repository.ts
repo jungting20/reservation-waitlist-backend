@@ -5,7 +5,10 @@ import { DRIZZLE_DB } from '../../../database/database.constants';
 import type { AppDatabase } from '../../../database/database.types';
 import { rooms, type RoomSelect } from '../../../database/schema/rooms';
 import { Room } from '../domain/room.entity';
-import type { RoomRepository } from '../domain/room.repository.port';
+import type {
+  CreateRoomInput,
+  RoomRepository,
+} from '../domain/room.repository.port';
 
 @Injectable()
 export class DrizzleRoomRepository
@@ -26,6 +29,16 @@ export class DrizzleRoomRepository
       createdBy: row.createdBy,
       createdAt: row.createdAt,
     });
+  }
+
+  async create(input: CreateRoomInput): Promise<Room> {
+    const [inserted] = await this.db.insert(rooms).values(input).returning();
+
+    if (!inserted) {
+      throw new Error('Failed to create room in database');
+    }
+
+    return this.mapToDomain(inserted);
   }
 
   async findAll(): Promise<Room[]> {

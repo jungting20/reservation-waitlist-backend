@@ -3,9 +3,10 @@ import {
   ROOM_REPOSITORY,
   type RoomRepository,
 } from '../domain/room.repository.port';
+import { RoomNotFoundError } from './errors/room-not-found.error';
 
 @Injectable()
-export class GetRoomsUseCase {
+export class RoomsQueryService {
   constructor(
     @Inject(ROOM_REPOSITORY) private readonly roomRepository: RoomRepository,
   ) {}
@@ -15,6 +16,10 @@ export class GetRoomsUseCase {
   }
 
   async getRoom(roomId: string) {
-    return this.roomRepository.findById(roomId);
+    const room = await this.roomRepository.findById(roomId);
+    if (!room) {
+      throw new RoomNotFoundError();
+    }
+    return room;
   }
 }
