@@ -31,7 +31,7 @@ export class DrizzleRoomRepository
     });
   }
 
-  async create(input: CreateRoomInput): Promise<Room> {
+  async save(input: CreateRoomInput): Promise<Room> {
     const [inserted] = await this.db.insert(rooms).values(input).returning();
 
     if (!inserted) {
@@ -39,6 +39,25 @@ export class DrizzleRoomRepository
     }
 
     return this.mapToDomain(inserted);
+  }
+
+  async update(input: Room): Promise<Room> {
+    const [updated] = await this.db
+      .update(rooms)
+      .set({
+        name: input.name,
+        description: input.description,
+        capacity: input.capacity,
+        isActive: input.isActive,
+      })
+      .where(eq(rooms.id, input.roomId))
+      .returning();
+
+    if (!updated) {
+      throw new Error('Failed to update room in database');
+    }
+
+    return this.mapToDomain(updated);
   }
 
   async findAll(): Promise<Room[]> {

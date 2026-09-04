@@ -10,7 +10,8 @@ export interface CreateRoomInput {
 }
 
 export interface RoomRepository {
-  create(input: CreateRoomInput): Promise<Room>;
+  save(input: Room): Promise<Room>;
+  update(input: Room): Promise<Room>;
   findAll(): Promise<Room[]>;
   findById(id: string): Promise<Room | null>;
 }

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import type { Room } from '../domain/room.entity';
+import { Room } from '../domain/room.entity';
 import {
   ROOM_REPOSITORY,
   type RoomRepository,
@@ -19,6 +19,13 @@ export class CreateRoomUseCase {
   ) {}
 
   async execute(command: CreateRoomCommand): Promise<Room> {
-    return this.roomRepository.create(command);
+    const room = Room.create({
+      ...command,
+      id: crypto.randomUUID(),
+      isActive: true,
+      createdAt: new Date(),
+    });
+
+    return this.roomRepository.save(room);
   }
 }

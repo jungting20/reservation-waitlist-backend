@@ -13,23 +13,35 @@ export interface RoomProps {
   createdAt: Date;
 }
 
+export type UpdateRoomProps = Partial<
+  Pick<RoomProps, 'name' | 'description' | 'capacity' | 'isActive'>
+>;
+
 export class Room {
   private constructor(private readonly props: RoomProps) {}
 
   static create(props: RoomProps): Room {
+    Room.validateCapacity(props.capacity);
+
+    return new Room(props);
+  }
+
+  update(props: UpdateRoomProps): Room {
+    return Room.create({ ...this.props, ...props });
+  }
+
+  private static validateCapacity(capacity: number): void {
     if (
-      !Number.isInteger(props.capacity) ||
-      props.capacity < MIN_ROOM_CAPACITY ||
-      props.capacity > MAX_ROOM_CAPACITY
+      !Number.isInteger(capacity) ||
+      capacity < MIN_ROOM_CAPACITY ||
+      capacity > MAX_ROOM_CAPACITY
     ) {
       throw new InvalidRoomCapacityError(
-        props.capacity,
+        capacity,
         MIN_ROOM_CAPACITY,
         MAX_ROOM_CAPACITY,
       );
     }
-
-    return new Room(props);
   }
 
   get roomId(): string {
