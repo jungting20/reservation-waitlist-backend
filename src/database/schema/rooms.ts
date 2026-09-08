@@ -11,7 +11,7 @@ import {
 import {
   MAX_ROOM_CAPACITY,
   MIN_ROOM_CAPACITY,
-} from '../../domains/rooms/domain/room.entity';
+} from '../../domains/rooms/domain/room.policy';
 import { users } from './users';
 
 export const rooms = pgTable(
