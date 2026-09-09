@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { DatabaseModule } from '../../database/database.module';
 import { CreateRoomUseCase } from './application/create-room.usecase';
 import { RoomsQueryService } from './application/rooms-query.service';
+import { UpdateRoomUseCase } from './application/update-room.usecase';
 import { ROOM_REPOSITORY } from './domain/room.repository.port';
 import { DrizzleRoomRepository } from './infrastructure/drizzle-room.repository';
 import { AdminRoomsController } from './presentation/admin-rooms.controller';
@@ -16,6 +17,7 @@ import { RoomsController } from './presentation/rooms.controller';
       useClass: DrizzleRoomRepository,
     },
     CreateRoomUseCase,
+    UpdateRoomUseCase,
     RoomsQueryService,
   ],
   // exports: [ROOM_REPOSITORY, RoomsQueryService],
