@@ -11,8 +11,12 @@ export class RoomsQueryService {
     @Inject(ROOM_REPOSITORY) private readonly roomRepository: RoomRepository,
   ) {}
 
-  async getRooms() {
-    return this.roomRepository.findAll();
+  async getRooms(page: number, limit: number) {
+    return this.roomRepository.findPage({
+      isActive: true,
+      limit,
+      offset: (page - 1) * limit,
+    });
   }
 
   async getRoom(roomId: string) {

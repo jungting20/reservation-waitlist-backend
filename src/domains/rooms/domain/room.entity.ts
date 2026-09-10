@@ -1,4 +1,5 @@
-import { validateCapacity } from './room.policy';
+import { InvalidRoomCapacityError } from './errors/invalid-room-capacity.error';
+import { MAX_ROOM_CAPACITY, MIN_ROOM_CAPACITY } from './room.policy';
 
 export interface RoomProps {
   id: string;
@@ -18,9 +19,23 @@ export class Room {
   private constructor(private readonly props: RoomProps) {}
 
   static create(props: RoomProps): Room {
-    validateCapacity(props.capacity);
+    Room.validateCapacity(props.capacity);
 
     return new Room(props);
+  }
+
+  private static validateCapacity(capacity: number): void {
+    if (
+      !Number.isInteger(capacity) ||
+      capacity < MIN_ROOM_CAPACITY ||
+      capacity > MAX_ROOM_CAPACITY
+    ) {
+      throw new InvalidRoomCapacityError(
+        capacity,
+        MIN_ROOM_CAPACITY,
+        MAX_ROOM_CAPACITY,
+      );
+    }
   }
 
   update(props: UpdateRoomProps): Room {

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   HttpCode,
   HttpStatus,
   Param,
@@ -47,5 +48,14 @@ export class AdminRoomsController {
     const room = await this.updateRoomUseCase.execute({ ...dto, roomId });
 
     return toRoomResponse(room);
+  }
+
+  @Delete(':roomId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deActiveRoom(@Param('roomId') roomId: string): Promise<void> {
+    await this.updateRoomUseCase.execute({
+      isActive: false,
+      roomId,
+    });
   }
 }

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 import { Repository } from '../../../common/infrastructure/repository';
 import { DRIZZLE_DB } from '../../../database/database.constants';
 import type { AppDatabase } from '../../../database/database.types';
@@ -7,6 +7,8 @@ import { rooms, type RoomSelect } from '../../../database/schema/rooms';
 import { Room } from '../domain/room.entity';
 import type {
   CreateRoomInput,
+  FindRoomsQuery,
+  FindRoomsResult,
   RoomRepository,
 } from '../domain/room.repository.port';
 
@@ -63,6 +65,29 @@ export class DrizzleRoomRepository
   async findAll(): Promise<Room[]> {
     const rows = await this.db.select().from(rooms);
     return rows.map((row) => this.mapToDomain(row));
+  }
+
+  async findPage(query: FindRoomsQuery): Promise<FindRoomsResult> {
+    const condition =
+      query.isActive === undefined
+        ? undefined
+        : eq(rooms.isActive, query.isActive);
+
+    const [rows, total] = await Promise.all([
+      this.db
+        .select()
+        .from(rooms)
+        .where(condition)
+        .orderBy(asc(rooms.createdAt), asc(rooms.id))
+        .limit(query.limit)
+        .offset(query.offset),
+      this.db.$count(rooms, condition),
+    ]);
+
+    return {
+      items: rows.map((row) => this.mapToDomain(row)),
+      total,
+    };
   }
 
   async findById(id: string): Promise<Room | null> {
