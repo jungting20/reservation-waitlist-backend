@@ -21,7 +21,7 @@ export class RoomsQueryService {
 
   async getRoom(roomId: string) {
     const room = await this.roomRepository.findById(roomId);
-    if (!room) {
+    if (!room || !room.isActive) {
       throw new RoomNotFoundError();
     }
     return room;
