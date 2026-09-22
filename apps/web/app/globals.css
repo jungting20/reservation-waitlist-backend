@@ -58,3 +58,101 @@ button:focus-visible {
   outline: 3px solid #95bea4;
   outline-offset: 4px;
 }
+
+.brand-link {
+  color: #285840;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-decoration: none;
+}
+.login-page {
+  max-width: 500px;
+  padding-top: 64px;
+}
+.login-card {
+  margin-top: 32px;
+  padding: 32px;
+}
+.login-card h1 {
+  font-size: 28px;
+  letter-spacing: -0.04em;
+}
+.login-card .description {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.login-card form {
+  margin-top: 32px;
+}
+.login-card label {
+  display: block;
+  margin: 22px 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.login-card input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid #cdd8d0;
+  border-radius: 8px;
+  color: #1d3028;
+  background: #fff;
+  font: inherit;
+  font-size: 16px;
+}
+.login-card input:focus-visible {
+  outline: 2px solid #527061;
+  outline-offset: 2px;
+}
+.login-card input:disabled {
+  background: #f6f7f4;
+}
+.password-field {
+  position: relative;
+}
+.password-field input {
+  padding-right: 74px;
+}
+.password-toggle {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  margin: 0;
+  min-height: 40px;
+  padding: 8px 12px;
+  color: #285840;
+  background: transparent;
+  font-size: 13px;
+}
+.login-submit {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 28px;
+  font-weight: 600;
+}
+.login-error {
+  color: #a02d2d;
+  font-size: 14px;
+}
+.login-footer {
+  text-align: center;
+  color: #65766b;
+  font-size: 13px;
+  margin-top: 28px;
+}
+.home-link {
+  display: inline-block;
+  margin-top: 16px;
+  color: #285840;
+  font-weight: 600;
+}
+@media (max-width: 420px) {
+  .login-page {
+    padding: 40px 16px;
+  }
+  .login-card {
+    padding: 24px;
+  }
+}

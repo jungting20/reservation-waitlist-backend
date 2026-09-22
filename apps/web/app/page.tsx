@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   const [status, setStatus] = useState('아직 연결을 확인하지 않았어요.');
@@ -32,6 +33,9 @@ export default function Home() {
       <p className="eyebrow">STUDY ROOM</p>
       <h1>스터디룸 예약</h1>
       <p className="description">함께 공부할 공간을 위한 첫걸음.</p>
+      <Link className="home-link" href="/login">
+        로그인 →
+      </Link>
       <section aria-labelledby="connection-title">
         <h2 id="connection-title">서비스 연결 확인</h2>
         <p role="status">{status}</p>
