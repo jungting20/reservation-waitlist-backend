@@ -1,7 +1,12 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["typescript", "jest", "unicorn"],
-  "ignorePatterns": ["dist/**", "coverage/**"],
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/coverage/**",
+    "**/.next/**",
+    "**/next-env.d.ts"
+  ],
   "rules": {
     "jest/require-to-throw-message": "off",
     "unicorn/prefer-node-protocol": "off"

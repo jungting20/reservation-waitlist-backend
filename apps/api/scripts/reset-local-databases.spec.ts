@@ -11,9 +11,10 @@ import { join, resolve } from 'node:path';
 import type { Env } from '../src/config/env.schema';
 import { assertLocalResetAllowed } from './reset-local-databases';
 
-const projectRoot = resolve(__dirname, '..');
+const projectRoot = resolve(__dirname, '../../..');
+const apiRoot = resolve(__dirname, '..');
 const resetScript = resolve(__dirname, 'reset-local-databases.ts');
-const tsx = resolve(projectRoot, 'node_modules', '.bin', 'tsx');
+const tsx = resolve(apiRoot, 'node_modules', '.bin', 'tsx');
 const localDatabaseUrl =
   'postgresql://reservation:reservation@localhost:5432/reservation';
 

@@ -5,5 +5,10 @@
   "trailingComma": "all",
   "printWidth": 80,
   "sortPackageJson": false,
-  "ignorePatterns": []
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/coverage/**",
+    "**/.next/**",
+    "**/next-env.d.ts"
+  ]
 }

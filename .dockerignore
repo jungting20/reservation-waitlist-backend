@@ -9,3 +9,10 @@ docs
 *.md
 .codegraph
 .gemini
+
+**/node_modules
+**/dist
+**/coverage
+**/.next
+**/.env*
+**/*.tsbuildinfo

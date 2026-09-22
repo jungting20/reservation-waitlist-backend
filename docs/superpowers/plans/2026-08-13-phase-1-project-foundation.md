@@ -1,5 +1,7 @@
 # Phase 1 프로젝트 기반 구성 Implementation Plan
 
+> 모노레포 전환 후 백엔드 소스·설정·테스트 경로는 `apps/api/` 기준입니다. 아래는 작성 당시의 계획이며 현재 실행 명령은 루트 README를 참고하세요.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** pnpm·mise 기반 NestJS 11 프로젝트에 Zod 환경검증, Drizzle/PostgreSQL 연결, DB 상태를 확인하는 Health API, 테스트와 CI를 구축한다.

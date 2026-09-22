@@ -5,7 +5,7 @@ import { parseEnv, type Env } from '../src/config/env.schema';
 
 const allowedHosts = new Set(['localhost', '127.0.0.1']);
 const allowedDatabases = new Set(['reservation', 'reservation_test']);
-const projectRoot = resolve(__dirname, '..');
+const projectRoot = resolve(__dirname, '../../..');
 const composeFile = resolve(projectRoot, 'compose.yaml');
 const composeProject = 'reservation-waitlist-local';
 const dockerContextNamePattern = /^[A-Za-z0-9][A-Za-z0-9_.-]*$/;

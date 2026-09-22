@@ -75,4 +75,4 @@ erDiagram
 
 ## 보류된 모델
 
-방별 운영 시간과 예약 가능 일정을 표현할 `RoomSchedule` 또는 `AvailabilityRule`은 Phase 3에서 정책을 확정한 뒤 추가한다.
+방별 운영 시간과 예약 가능 일정을 표현할 `RoomSchedule` 또는 `AvailabilityRule`은 Phase 4에서 정책을 확정한 뒤 추가한다.

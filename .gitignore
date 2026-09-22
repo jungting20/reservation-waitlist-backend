@@ -8,3 +8,7 @@ coverage/
 *.log
 *.tsbuildinfo
 .worktrees/
+
+.next/
+out/
+apps/web/next-env.d.ts
