@@ -42,7 +42,7 @@ export class Room {
     return Room.create({ ...this.props, ...props });
   }
 
-  get roomId(): string {
+  get id(): string {
     return this.props.id;
   }
 

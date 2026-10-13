@@ -6,7 +6,6 @@ import type { AppDatabase } from '../../../database/database.types';
 import { rooms, type RoomSelect } from '../../../database/schema/rooms';
 import { Room } from '../domain/room.entity';
 import type {
-  CreateRoomInput,
   FindRoomsQuery,
   FindRoomsResult,
   RoomRepository,
@@ -33,8 +32,19 @@ export class DrizzleRoomRepository
     });
   }
 
-  async save(input: CreateRoomInput): Promise<Room> {
-    const [inserted] = await this.db.insert(rooms).values(input).returning();
+  async save(input: Room): Promise<Room> {
+    const [inserted] = await this.db
+      .insert(rooms)
+      .values({
+        id: input.id,
+        name: input.name,
+        description: input.description,
+        capacity: input.capacity,
+        isActive: input.isActive,
+        createdBy: input.createdBy,
+        createdAt: input.createdAt,
+      })
+      .returning();
 
     if (!inserted) {
       throw new Error('Failed to create room in database');
@@ -52,7 +62,7 @@ export class DrizzleRoomRepository
         capacity: input.capacity,
         isActive: input.isActive,
       })
-      .where(eq(rooms.id, input.roomId))
+      .where(eq(rooms.id, input.id))
       .returning();
 
     if (!updated) {

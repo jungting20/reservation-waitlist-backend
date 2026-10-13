@@ -12,7 +12,7 @@ export interface RoomResponse {
 
 export function toRoomResponse(room: Room): RoomResponse {
   return {
-    id: room.roomId,
+    id: room.id,
     name: room.name,
     description: room.description,
     capacity: room.capacity,
