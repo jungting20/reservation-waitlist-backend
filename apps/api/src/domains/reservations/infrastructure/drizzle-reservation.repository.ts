@@ -7,8 +7,12 @@ import {
   reservations,
   type ReservationSelect,
 } from '../../../database/schema/reservations';
+import { users } from '../../../database/schema/users';
 import { Reservation } from '../domain/reservation.entity';
-import type { ReservationRepository } from '../domain/reservation.repository.port';
+import type {
+  ReservationListItem,
+  ReservationRepository,
+} from '../domain/reservation.repository.port';
 
 @Injectable()
 export class DrizzleReservationRepository
@@ -32,6 +36,28 @@ export class DrizzleReservationRepository
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
     });
+  }
+
+  async list(): Promise<ReservationListItem[]> {
+    return this.db
+      .select({
+        id: reservations.id,
+        userId: reservations.userId,
+        roomId: reservations.roomId,
+        startsAt: reservations.startsAt,
+        endsAt: reservations.endsAt,
+        status: reservations.status,
+        cancelledByUserId: reservations.cancelledByUserId,
+        cancelledAt: reservations.cancelledAt,
+        createdAt: reservations.createdAt,
+        updatedAt: reservations.updatedAt,
+        user: {
+          id: users.id,
+          email: users.email,
+        },
+      })
+      .from(reservations)
+      .innerJoin(users, eq(reservations.userId, users.id));
   }
 
   async findById(id: string): Promise<Reservation | null> {
