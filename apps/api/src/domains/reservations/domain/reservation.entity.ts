@@ -1,3 +1,13 @@
+import { InvalidReservationTimeError } from './errors/invalid-reservation-time.error';
+import {
+  MAX_RESERVATION_DURATION_MINUTES,
+  MIN_RESERVATION_DURATION_MINUTES,
+  RESERVATION_BOOKING_WINDOW_DAYS,
+  RESERVATION_CLOSING_HOUR,
+  RESERVATION_OPENING_HOUR,
+  RESERVATION_START_MINUTE,
+} from './reservation.policy';
+
 export type ReservationStatus =
   | 'PENDING'
   | 'CONFIRMED'
@@ -17,6 +27,10 @@ export interface ReservationProps {
   updatedAt: Date;
 }
 
+export type UpdateReservationProps = Partial<
+  Pick<ReservationProps, 'status' | 'cancelledByUserId' | 'cancelledAt'>
+>;
+
 export class Reservation {
   private constructor(private readonly props: ReservationProps) {}
 
@@ -24,6 +38,14 @@ export class Reservation {
     Reservation.validateTime(props.startsAt, props.endsAt, now);
 
     return new Reservation(props);
+  }
+
+  static restore(props: ReservationProps): Reservation {
+    return new Reservation(props);
+  }
+
+  update(props: UpdateReservationProps, now: Date): Reservation {
+    return Reservation.restore({ ...this.props, ...props, updatedAt: now });
   }
 
   private static validateTime(startsAt: Date, endsAt: Date, now: Date): void {
@@ -124,12 +146,3 @@ export class Reservation {
     return this.props.updatedAt;
   }
 }
-import { InvalidReservationTimeError } from './errors/invalid-reservation-time.error';
-import {
-  MAX_RESERVATION_DURATION_MINUTES,
-  MIN_RESERVATION_DURATION_MINUTES,
-  RESERVATION_BOOKING_WINDOW_DAYS,
-  RESERVATION_CLOSING_HOUR,
-  RESERVATION_OPENING_HOUR,
-  RESERVATION_START_MINUTE,
-} from './reservation.policy';
