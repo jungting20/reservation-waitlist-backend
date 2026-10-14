@@ -4,6 +4,9 @@ import {
   RESERVATION_REPOSITORY,
   type ReservationRepository,
 } from '../domain/reservation.repository.port';
+import { ROOM_QUERY, type RoomQueryPort } from './ports/room-query.port';
+import { ReservationRoomNotFoundError } from './errors/reservation-room-not-found.error';
+import { ReservationRoomInactiveError } from './errors/reservation-room-inactive.error';
 
 export interface CreateReservationCommand {
   userId: string;
@@ -17,15 +20,29 @@ export class CreateReservationUseCase {
   constructor(
     @Inject(RESERVATION_REPOSITORY)
     private readonly reservationRepository: ReservationRepository,
+
+    @Inject(ROOM_QUERY)
+    private readonly roomQueryPort: RoomQueryPort,
   ) {}
 
   async execute(command: CreateReservationCommand): Promise<Reservation> {
     const now = new Date();
+    //roomId로 방 상태 조회
+    const room = await this.roomQueryPort.findById(command.roomId);
+    if (!room) {
+      throw new ReservationRoomNotFoundError();
+    }
+    if (!room.isActive) {
+      throw new ReservationRoomInactiveError();
+    }
+
+    //userId, roomid, startsAt 으로 일단 예약조회
+
     const reservation = Reservation.create(
       {
         ...command,
         id: crypto.randomUUID(),
-        status: 'PENDING',
+        status: 'CONFIRMED',
         cancelledByUserId: null,
         cancelledAt: null,
         createdAt: now,

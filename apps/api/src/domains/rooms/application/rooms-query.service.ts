@@ -26,4 +26,8 @@ export class RoomsQueryService {
     }
     return room;
   }
+
+  async findRoom(roomId: string) {
+    return this.roomRepository.findById(roomId);
+  }
 }

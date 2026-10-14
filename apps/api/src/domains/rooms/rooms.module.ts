@@ -20,6 +20,6 @@ import { RoomsController } from './presentation/rooms.controller';
     UpdateRoomUseCase,
     RoomsQueryService,
   ],
-  // exports: [ROOM_REPOSITORY, RoomsQueryService],
+  exports: [RoomsQueryService],
 })
 export class RoomsModule {}
