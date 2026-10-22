@@ -6,13 +6,13 @@ import {
 } from '../domain/reservation.repository.port';
 
 @Injectable()
-export class ListReservationsUseCase {
+export class ReservationsQueryService {
   constructor(
     @Inject(RESERVATION_REPOSITORY)
     private readonly reservationRepository: ReservationRepository,
   ) {}
 
-  async execute(): Promise<ReservationListItem[]> {
+  async list(): Promise<ReservationListItem[]> {
     return this.reservationRepository.list();
   }
 }

@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { Repository } from '../../../common/infrastructure/repository';
 import { DRIZZLE_DB } from '../../../database/database.constants';
 import type { AppDatabase } from '../../../database/database.types';
@@ -114,5 +114,21 @@ export class DrizzleReservationRepository
     }
 
     return this.mapToDomain(updated);
+  }
+
+  async existsOverlappingReservation(
+    roomId: string,
+    startsAt: Date,
+  ): Promise<boolean> {
+    const rows = await this.db
+      .select()
+      .from(reservations)
+      .where(
+        and(
+          eq(reservations.roomId, roomId),
+          eq(reservations.startsAt, startsAt),
+        ),
+      );
+    return rows.length > 0;
   }
 }

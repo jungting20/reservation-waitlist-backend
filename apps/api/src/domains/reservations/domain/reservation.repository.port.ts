@@ -24,4 +24,8 @@ export interface ReservationRepository {
   save(input: Reservation): Promise<Reservation>;
   update(input: Reservation): Promise<Reservation>;
   findById(id: string): Promise<Reservation | null>;
+  existsOverlappingReservation(
+    roomId: string,
+    startsAt: Date,
+  ): Promise<boolean>;
 }

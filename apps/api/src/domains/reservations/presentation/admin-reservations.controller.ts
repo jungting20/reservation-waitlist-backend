@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 import { ZodValidationPipe } from '../../../common/pipes/zod-validation.pipe';
 import { Roles } from '../../auth/presentation/decorators/roles.decorator';
-import { ListReservationsUseCase } from '../application/list-reservations.usecase';
+import { ReservationsQueryService } from '../application/reservations-query.service';
 import {
   UpdateReservationUseCase,
   type UpdateReservationCommand,
@@ -21,13 +21,13 @@ import {
 @Roles('ADMIN')
 export class AdminReservationsController {
   constructor(
-    private readonly listReservationsUseCase: ListReservationsUseCase,
+    private readonly reservationsQueryService: ReservationsQueryService,
     private readonly updateReservationUseCase: UpdateReservationUseCase,
   ) {}
 
   @Get()
   async listReservations(): Promise<ReservationListItemResponse[]> {
-    const reservations = await this.listReservationsUseCase.execute();
+    const reservations = await this.reservationsQueryService.list();
     return reservations.map(toReservationListItemResponse);
   }
 

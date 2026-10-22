@@ -66,16 +66,22 @@
 
 ## 6. 개발 체크리스트
 
+> 체크는 현재 코드의 구현 여부를 기준으로 한다. 테스트 실행·DB 적용 여부는 이번에 검증하지 않았다.
+
 - [ ] **Step 1: Room 도메인 & DB 구성**
-  - [ ] `Room` 엔티티 및 `RoomRepository` 포트 작성
-  - [ ] Drizzle ORM `rooms` 테이블 스키마 작성 및 마이그레이션 생성
-  - [ ] `DrizzleRoomRepository` 구현 및 단위/통합 테스트
+  - [x] `Room` 엔티티 및 `RoomRepository` 포트 작성
+  - [x] Drizzle ORM `rooms` 테이블 스키마 작성 및 마이그레이션 생성
+  - [x] `DrizzleRoomRepository` 구현
+  - [ ] Repository 단위/통합 테스트 검증 (기존 테스트의 `roomId`, `findAll` 참조가 현재 구현과 맞지 않음)
 - [ ] **Step 2: 관리자 룸 관리 API**
-  - [ ] `CreateRoomUseCase`, `UpdateRoomUseCase`, `DeactivateRoomUseCase` 구현
-  - [ ] `AdminRoomsController` (`@Roles('ADMIN')`) 구현 및 가드 테스트
+  - [x] `CreateRoomUseCase`, `UpdateRoomUseCase` 구현 (비활성화는 `UpdateRoomUseCase`로 처리)
+  - [x] `AdminRoomsController` (`@Roles('ADMIN')`) 구현
+  - [x] 공통 `AuthGuard`, `RolesGuard` 테스트 작성
+  - [ ] 관리자 룸 생성·수정·비활성화 API 동작 검증
 - [ ] **Step 3: 사용자 룸 조회 API**
-  - [ ] `GetRoomsUseCase` (페이지네이션/필터링) 및 `GetRoomDetailUseCase` 구현
-  - [ ] `RoomsController` (`@Public()`) 구현 및 테스트
+  - [x] `RoomsQueryService`로 활성 방 목록 페이지네이션 및 상세 조회 구현
+  - [x] `RoomsController` 구현 (현재 인증 필요, `@Public()` 미적용)
+  - [ ] 사용자 룸 조회 API 테스트 작성 및 검증
 - [ ] **Step 4: 전체 테스트 및 린트/포맷 검증**
   - [ ] 단위/E2E 테스트 실행 (`pnpm test`, `pnpm test:e2e`)
   - [ ] `pnpm lint`, `pnpm format:check`, `pnpm typecheck` 통과

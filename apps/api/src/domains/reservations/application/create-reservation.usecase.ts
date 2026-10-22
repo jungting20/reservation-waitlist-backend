@@ -35,8 +35,16 @@ export class CreateReservationUseCase {
     if (!room.isActive) {
       throw new ReservationRoomInactiveError();
     }
-
     //userId, roomid, startsAt 으로 일단 예약조회
+    const exists =
+      await this.reservationRepository.existsOverlappingReservation(
+        command.roomId,
+        command.startsAt,
+      );
+
+    if (exists) {
+      throw new Error('Room is already reserved');
+    }
 
     const reservation = Reservation.create(
       {
